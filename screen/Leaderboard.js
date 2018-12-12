@@ -5,7 +5,7 @@ export default class Leaderboard extends Component {
     render() {
         return (
             <Container>
-                <View style={{ flex: 1, alignItems: 'center', alignContent: 'center', marginTop:10 }}>
+                <View style={{ flex: 1, alignItems: 'center', alignContent: 'center', marginTop: 10 }}>
                     <Card style={{ width: '80%', alignItems: 'center', paddingVertical: 10 }}>
                         <Text>My Combos: 10</Text>
                         <Thumbnail source={require('../assets/user.png')} style={{ marginVertical: 10 }} />
