@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container, View, Button, Text, Content, Thumbnail, CardItem, Card, Body } from 'native-base';
 import { ImageBackground, Image, TouchableOpacity } from 'react-native'
 import ruleMusic from '../data/ruleMusic'
+import PlaySound from 'react-native-sound-player'
 
 export default class Home extends Component {
 
@@ -15,10 +16,10 @@ export default class Home extends Component {
     }
   }
 
-
-  combat = (value) => () => {
+  combat = (value, song) => () => {
+    PlaySound.playSoundFile(song, 'mp3')
     if (ruleMusic.setRule[this.state.counter] === value) {
-      if (this.state.counter > 6) {
+      if ((this.state.counter + 1) === ruleMusic.setRule.length) {
         this.setState({
           number: this.state.number + 1,
           counter: 0
@@ -26,7 +27,6 @@ export default class Home extends Component {
       } else {
         this.setState({
           counter: this.state.counter + 1,
-          number: this.state.number + 1
         })
       }
     } else {
@@ -77,17 +77,17 @@ export default class Home extends Component {
             <Text> Play Music {ruleMusic.setRule[this.state.counter]} </Text>
           </Button>
           <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'space-between' }}>
-            <Button rounded style={{ margin: 12 }} large onPress={this.combat(1)}>
+            <Button rounded style={{ margin: 12 }} large onPress={this.combat(1, 'te')}>
               <Text>Te</Text>
             </Button>
-            <Button rounded style={{ margin: 12, alignSelf: 'flex-end' }} danger large onPress={this.combat(2)}>
-              <Text>No</Text>
+            <Button rounded style={{ margin: 12, alignSelf: 'flex-end' }} danger large onPress={this.combat(2, 'ng')}>
+              <Text>Ou</Text>
             </Button>
-            <Button rounded style={{ margin: 12 }} success large onPress={this.combat(3)}>
+            <Button rounded style={{ margin: 12 }} success large onPress={this.combat(3, 'net')}>
+              <Text>Net</Text>
+            </Button>
+            <Button rounded style={{ margin: 12, alignSelf: 'flex-end' }} info large onPress={this.combat(4, 'enge')}>
               <Text>Ng</Text>
-            </Button>
-            <Button rounded style={{ margin: 12, alignSelf: 'flex-end' }} info large onPress={this.combat(4)}>
-              <Text>et</Text>
             </Button>
           </View>
         </ImageBackground>

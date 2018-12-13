@@ -1,5 +1,5 @@
 const ruleMusic = {
-    setRule: [1, 2, 3, 4, 4, 4, 4, 4],
+    setRule: [1, 2, 1, 2, 1, 2, 1, 2, 3, 2, 4],
     combo: 0,
 }
 

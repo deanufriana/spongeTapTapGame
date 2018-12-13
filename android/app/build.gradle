@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-sound-player')
     compile project(':react-native-gesture-handler')
     compile project(':react-native-linear-gradient')
     implementation fileTree(dir: "libs", include: ["*.jar"])

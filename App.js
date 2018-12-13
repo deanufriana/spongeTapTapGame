@@ -8,6 +8,7 @@ import introStyle from './style/introStyle'
 import Home from './screen/Home'
 import slides from './data/introData'
 import Leaderboard from './screen/Leaderboard'
+import Cek from './screen/Cek';
 
 class App extends React.Component {
   _renderItem = props => (
@@ -63,7 +64,8 @@ const AppNavigator = createStackNavigator(
       navigationOptions: {
         title: 'Leaderboard'
       }
-    }
+    },
+    Cek: Cek
   },
   {
     initialRouteName: 'Home',
