@@ -3,6 +3,8 @@ import { Container, View, Button, Text, Content, Thumbnail, CardItem, Card, Body
 import { ImageBackground, Image, TouchableOpacity } from 'react-native'
 import ruleMusic from '../data/ruleMusic'
 import PlaySound from 'react-native-sound-player'
+import * as Animatable from 'react-native-animatable'
+import homeStyle from '../style/homeStyle'
 
 export default class Home extends Component {
 
@@ -12,43 +14,67 @@ export default class Home extends Component {
 
     this.state = {
       counter: 0,
-      number: 0
+      number: 0,
+      image: require('../assets/buble.png')
     }
   }
 
+  // Handle Ref Untuk Animasi
+  handleViewRef = (view) => ref => this[view] = ref
+
+  // Cek Jika Valuenya Sama
+  checkViewName = (value) => {
+    switch (value) {
+      case 1:
+        return 'view'
+      case 2:
+        return 'view1'
+      case 3:
+        return 'view2';
+      case 4:
+        return 'view3'
+      default:
+        break;
+    }
+  }
+
+  border = (value) => ruleMusic.setRule[this.state.counter] === value ? true : false
+
+  bounceIn = (value) => this[this.checkViewName(value)].bounceIn(500)
+
   combat = (value, song) => () => {
+
     PlaySound.playSoundFile(song, 'mp3')
+    this.bounceIn(value)
     if (ruleMusic.setRule[this.state.counter] === value) {
       if ((this.state.counter + 1) === ruleMusic.setRule.length) {
         this.setState({
           number: this.state.number + 1,
-          counter: 0
+          counter: 0,
         })
       } else {
         this.setState({
           counter: this.state.counter + 1,
+          image: require('../assets/buble.png')
         })
       }
     } else {
       this.setState({
         ...this.state,
-        counter: 0
+        counter: 0,
+        image: require('../assets/fail.png')
       })
-      alert('Salah')
     }
-
-
-
   }
 
   render() {
     return (
       <Container>
         <ImageBackground source={require('../assets/bakcground.jpg')} style={{ flex: 1, width: null }}>
-          <View style={{ backgroundColor: 'rgba(75, 75, 75, 0.8)', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <View style={{ flexDirection: 'row', margin: 5, justifyContent: 'space-between' }}>
+          <View style={homeStyle.mainContent}>
+            <View style={homeStyle.header}>
               <Thumbnail small source={require('../assets/trophy.png')} />
-              <View style={{ marginHorizontal: 11 }}>
+              <View style={homeStyle.headerContent}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Lead')}>
                   <Text style={{ color: 'white', fontSize: 12 }}> Sponge Shark </Text>
                   <Button onPress={() => this.props.navigation.navigate('Lead')} small style={{ height: 15, backgroundColor: '#FD9300' }}>
@@ -56,8 +82,7 @@ export default class Home extends Component {
                   </Button>
                 </TouchableOpacity>
               </View>
-
-              <View style={{ marginHorizontal: 11 }}>
+              <View style={homeStyle.headerContent}>
                 <Text style={{ color: 'white', textAlign: 'right', fontSize: 12 }}>DeviAdi</Text>
                 <Button small style={{ height: 15 }}>
                   <Text style={{ fontSize: 12 }}>Connect</Text>
@@ -67,28 +92,41 @@ export default class Home extends Component {
             </View>
           </View>
           <View style={{ alignItems: 'center' }}>
-            <Card style={{ width: '50%', height: 100, alignItems: 'center', justifyContent: 'center' }}>
+            <Card style={homeStyle.cardHeader}>
               <Text style={{ fontSize: 50 }}> {this.state.number} </Text>
               <Text> Combat </Text>
             </Card>
-            <Thumbnail large square source={require('../assets/buble.png')} style={{ width: 320, height: 270 }} />
+            <Image source={this.state.image} />
           </View>
           <Button transparent>
-            <Text> Play Music {ruleMusic.setRule[this.state.counter]} </Text>
+            <Text> Tap When Button Transparent </Text>
           </Button>
-          <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'space-between' }}>
-            <Button rounded style={{ margin: 12 }} large onPress={this.combat(1, 'te')}>
-              <Text>Te</Text>
-            </Button>
-            <Button rounded style={{ margin: 12, alignSelf: 'flex-end' }} danger large onPress={this.combat(2, 'ng')}>
-              <Text>Ou</Text>
-            </Button>
-            <Button rounded style={{ margin: 12 }} success large onPress={this.combat(3, 'net')}>
-              <Text>Net</Text>
-            </Button>
-            <Button rounded style={{ margin: 12, alignSelf: 'flex-end' }} info large onPress={this.combat(4, 'enge')}>
-              <Text>Ng</Text>
-            </Button>
+          <View style={homeStyle.footer}>
+
+            <Animatable.View ref={this.handleViewRef('view')}>
+              <Button bordered={this.border(1)} rounded style={{ margin: 12 }} large onPress={this.combat(1, 'te')}>
+                <Text>Te</Text>
+              </Button>
+            </Animatable.View>
+
+            <Animatable.View ref={this.handleViewRef('view1')} style={homeStyle.button}>
+              <Button rounded bordered={this.border(2)} danger large onPress={this.combat(2, 'ng')}>
+                <Text>Ou</Text>
+              </Button>
+            </Animatable.View>
+
+            <Animatable.View ref={this.handleViewRef('view2')}>
+              <Button rounded style={{ margin: 12 }} bordered={this.border(3)} success large onPress={this.combat(3, 'net')}>
+                <Text>Nt</Text>
+              </Button>
+            </Animatable.View>
+
+            <Animatable.View ref={this.handleViewRef('view3')} style={homeStyle.button}>
+              <Button rounded info large onPress={this.combat(4, 'enge')} bordered={this.border(4)}>
+                <Text>Ng</Text>
+              </Button>
+            </Animatable.View>
+
           </View>
         </ImageBackground>
 
