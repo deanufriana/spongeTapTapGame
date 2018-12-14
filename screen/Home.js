@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Container, View, Button, Text, Content, Thumbnail, CardItem, Card, Body } from 'native-base';
-import { ImageBackground, Image, TouchableOpacity } from 'react-native'
-import ruleMusic from '../data/ruleMusic'
+import { ImageBackground, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
 import PlaySound from 'react-native-sound-player'
 import * as Animatable from 'react-native-animatable'
 import homeStyle from '../style/homeStyle'
@@ -11,12 +10,34 @@ export default class Home extends Component {
   constructor() {
     super()
     this.combat = this.combat.bind(this);
-
     this.state = {
       counter: 0,
       number: 0,
-      image: require('../assets/buble.png')
+      image: require('../assets/buble.png'),
+      isLoading: true,
+
     }
+  }
+
+  componentDidMount() {
+    return fetch('http://10.0.2.2:3333/api/asset')
+      .then((response) => {
+        console.log(response)
+        return response.json()
+      })
+      .then((responseJson) => {
+        console.log(responseJson)
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson,
+          ruleMusic: responseJson.setRule
+        }, function () {
+
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   // Handle Ref Untuk Animasi
@@ -38,7 +59,7 @@ export default class Home extends Component {
     }
   }
 
-  border = (value) => ruleMusic.setRule[this.state.counter] === value ? true : false
+  border = (value) => parseInt(this.state.ruleMusic[this.state.counter]) === value ? true : false
 
   bounceIn = (value) => this[this.checkViewName(value)].bounceIn(500)
 
@@ -46,8 +67,8 @@ export default class Home extends Component {
 
     PlaySound.playSoundFile(song, 'mp3')
     this.bounceIn(value)
-    if (ruleMusic.setRule[this.state.counter] === value) {
-      if ((this.state.counter + 1) === ruleMusic.setRule.length) {
+    if (parseInt(this.state.ruleMusic[this.state.counter]) === value) {
+      if ((this.state.counter + 1) === this.state.ruleMusic.length) {
         this.setState({
           number: this.state.number + 1,
           counter: 0,
@@ -68,9 +89,17 @@ export default class Home extends Component {
   }
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={{ flex: 1, padding: 20 }}>
+          <ActivityIndicator />
+        </View>
+      )
+    }
+
     return (
       <Container>
-        <ImageBackground source={require('../assets/bakcground.jpg')} style={{ flex: 1, width: null }}>
+        <ImageBackground style={{ flex: 1, width: null, backgroundColor: this.state.dataSource.backgroundColor }}>
           <View style={homeStyle.mainContent}>
             <View style={homeStyle.header}>
               <Thumbnail small source={require('../assets/trophy.png')} />
@@ -96,7 +125,7 @@ export default class Home extends Component {
               <Text style={{ fontSize: 50 }}> {this.state.number} </Text>
               <Text> Combat </Text>
             </Card>
-            <Image source={this.state.image} />
+            <Image source={{ uri: this.state.dataSource.mainImage }} style={{ width: 300, height: 230 }} />
           </View>
           <Button transparent>
             <Text> Tap When Button Transparent </Text>

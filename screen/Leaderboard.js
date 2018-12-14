@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Text, Button, Icon, View, Card, Thumbnail, List, ListItem, Left, Body, Header } from 'native-base';
+import { Container, Text, Button, Icon, View, Card, Thumbnail, ListItem, Body} from 'native-base';
 
 export default class Leaderboard extends Component {
     render() {

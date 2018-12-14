@@ -3,5 +3,4 @@ const ruleMusic = {
     combo: 0,
 }
 
-
 export default ruleMusic

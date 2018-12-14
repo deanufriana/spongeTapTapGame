@@ -68,7 +68,7 @@ const AppNavigator = createStackNavigator(
     Cek: Cek
   },
   {
-    initialRouteName: 'IntroSlide',
+    initialRouteName: 'Home',
   }
 )
 

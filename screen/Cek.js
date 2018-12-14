@@ -1,11 +1,39 @@
 import React, { Component } from 'react'
 import { Container, Button, Text } from 'native-base'
-import { TouchableWithoutFeedback } from 'react-native'
 import SoundPlayer from 'react-native-sound-player'
+import { FlatList, ActivityIndicator, View, TouchableWithoutFeedback, Image } from 'react-native';
 import * as Animatable from 'react-native-animatable'
 
 
 export default class Cek extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: true,
+        }
+    }
+
+    componentDidMount() {
+        return fetch('http://10.0.2.2:3333/api/asset')
+            .then((response) => {
+                console.log(response)
+                return response.json()
+            })
+            .then((responseJson) => {
+                console.log(responseJson)
+                this.setState({
+                    isLoading: false,
+                    dataSource: responseJson,
+                }, function () {
+
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     playSong() {
         try {
             SoundPlayer.playSoundFile('net', 'mp3')
@@ -20,6 +48,14 @@ export default class Cek extends Component {
 
 
     render() {
+
+        if (this.state.isLoading) {
+            return (
+                <View style={{ flex: 1, padding: 20 }}>
+                    <ActivityIndicator />
+                </View>
+            )
+        }
         return (
             <Container>
                 <Button onPress={this.playSong}>
@@ -31,7 +67,16 @@ export default class Cek extends Component {
                         <Text>Bounce me!</Text>
                     </Animatable.View>
                 </TouchableWithoutFeedback>
-            </Container>
+                <FlatList
+                    data={this.state.dataSource}
+                    renderItem={({ item, key }) => {
+                        return <Container key={key}>
+                            <Image source={{ uri: item.mainImage }} style={{ width: 66, height: 58 }} ></Image>
+                            <Text>{item.mainImage}, {item.setRule}</Text>
+                        </Container>
+                    }}
+                />
+            </Container >
         )
     }
 }
