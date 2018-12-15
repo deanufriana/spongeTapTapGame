@@ -13,7 +13,7 @@ export default class Home extends Component {
     this.state = {
       counter: 0,
       number: 0,
-      image: require('../assets/buble.png'),
+
       isLoading: true,
 
     }
@@ -30,7 +30,8 @@ export default class Home extends Component {
         this.setState({
           isLoading: false,
           dataSource: responseJson,
-          ruleMusic: responseJson.setRule
+          ruleMusic: responseJson.setRule,
+          image: responseJson.mainImage,
         }, function () {
 
         });
@@ -76,14 +77,14 @@ export default class Home extends Component {
       } else {
         this.setState({
           counter: this.state.counter + 1,
-          image: require('../assets/buble.png')
+          image: this.state.dataSource.mainImage
         })
       }
     } else {
       this.setState({
         ...this.state,
         counter: 0,
-        image: require('../assets/fail.png')
+        image: "http://www.pngall.com/wp-content/uploads/2016/06/Fail-Stamp-PNG-Clipart.png"
       })
     }
   }
@@ -99,7 +100,7 @@ export default class Home extends Component {
 
     return (
       <Container>
-        <ImageBackground style={{ flex: 1, width: null, backgroundColor: this.state.dataSource.backgroundColor }}>
+        <ImageBackground style={{ flex: 1, width: null }} source={{ uri: this.state.dataSource.backgroundImage, cache: 'only-if-cached' }}>
           <View style={homeStyle.mainContent}>
             <View style={homeStyle.header}>
               <Thumbnail small source={require('../assets/trophy.png')} />
@@ -125,7 +126,7 @@ export default class Home extends Component {
               <Text style={{ fontSize: 50 }}> {this.state.number} </Text>
               <Text> Combat </Text>
             </Card>
-            <Image source={{ uri: this.state.dataSource.mainImage }} style={{ width: 300, height: 230 }} />
+            <Image source={{ uri: this.state.image, cache: 'only-if-cached'}} style={{ width: 270, height: 230 }} />
           </View>
           <Button transparent>
             <Text> Tap When Button Transparent </Text>

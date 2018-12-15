@@ -22,6 +22,7 @@ const homeStyle = StyleSheet.create({
         width: '50%',
         height: null,
         alignItems: 'center', justifyContent: 'center',
+        marginBottom: 25
 
     },
     button: {
